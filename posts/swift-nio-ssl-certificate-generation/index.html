@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>swift-nio SSL Certificate Generation | krad.io</title>
+<link rel="stylesheet" href="https://www.krad.io/css/style.css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/styles/github.min.css">
+
+
+<section class="section">
+  <div class="container">
+    <nav class="nav">
+      <div class="nav-left">
+        <a class="nav-item" href="https://www.krad.io"><h1 class="title is-4">krad.io</h1></a>
+      </div>
+      <div class="nav-right">
+        <nav class="nav-item level is-mobile">
+          
+          <a class="level-item" href="https://github.com/krad">
+            <span class="icon">
+              <i class="fa fa-github"></i>
+            </span>
+          </a>
+          
+          <a class="level-item" href="/index.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+          </a>
+          
+        </nav>
+      </div>
+    </nav>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2 class="subtitle is-6">April 4, 2018</h2>
+    <h1 class="title">swift-nio SSL Certificate Generation</h1>
+    <div class="content">
+      
+
+<p>Apple has released a new project for non-blocking io, appropriately named <a href="https://github.com/apple/swift-nio">swift-nio</a></p>
+
+<p>It also released some SSL helpers for the project that allow you to create servers with
+encrypted communication channels.</p>
+
+<p><code>swift-nio</code> is quite new and Apple appears to be doing quite a bit of work on it.
+That means that documentation is pretty sparse for somethings at the moment.</p>
+
+<p>One of those things is how to generate an SSL certificate for use with <code>swift-nio</code></p>
+
+<p>Below you will find instructions on how to do so</p>
+
+<h2 id="macos-instructions">macOS instructions</h2>
+
+<p>Below are instructions for using native macOS tools for certificate generation</p>
+
+<ol>
+<li><h4 id="open-keychain-access">Open <code>Keychain Access</code></h4>
+
+<p><img src="/public/images/posts/swift-nio-ssl/keychain-access-window.png" alt="Keychain Access Window" /></p></li>
+
+<li><h4 id="under-the-keychain-access-menu-bar">Under the <code>Keychain Access</code> Menu Bar</h4>
+
+<p>Select <code>Certificate Assistant</code> and then <code>Create a Certificate Authority...</code>
+<img src="/public/images/posts/swift-nio-ssl/keychain-access-menu.png" alt="Keychain Access Menu" /></p></li>
+
+<li><h4 id="fill-out-the-form">Fill out the form.</h4>
+
+<p>You can set the name to whatever you want.
+ Change <code>User Certificate</code> to <code>SSL Server</code></p>
+
+<p><img src="/public/images/posts/swift-nio-ssl/create-ca-menu.png" alt="Keychain Access Creation Form" /></p>
+
+<p>Now press <code>Create</code></p></li>
+
+<li><h4 id="press-show-certificate-authority">Press <code>Show Certificate Authority</code></h4>
+
+<p><img src="/public/images/posts/swift-nio-ssl/create-ca-menu-aftermath.png" alt="Creation Aftermath" /></p></li>
+
+<li><h4 id="a-finder-window-will-open">A Finder window will open</h4>
+
+<p>The file with the <code>.pem</code> extension is your certificate.
+<img src="/public/images/posts/swift-nio-ssl/finder-window-with-certs.png" alt="Finder windows" /></p></li>
+
+<li><h4 id="go-back-to-keychain-access">Go back to &ldquo;Keychain Access&rdquo;</h4>
+
+<p>Search for what you named the CA in step #3
+<img src="/public/images/posts/swift-nio-ssl/example-keychain-access.png" alt="Keychain Cert Search" /></p></li>
+
+<li><h4 id="export-the-private-key">Export the private key</h4>
+
+<p>Right click on the private key and choose <code>Export</code>
+<img src="/public/images/posts/swift-nio-ssl/export-cert.png" alt="Export the cert" /></p></li>
+
+<li><h4 id="save-the-file">Save the file</h4>
+
+<p>Ensure the file is saved in <code>p12 format</code>
+<img src="/public/images/posts/swift-nio-ssl/save-cert.png" alt="Save the private key" /></p></li>
+
+<li><h4 id="open-terminal">Open Terminal</h4>
+
+<p>Run the following command using replacing the keyname where appropriate:
+<code>openssl pkcs12 -in INSERT_KEY_NAME_HERE.p12 -out INSERT_WHAT_YOU_WANT_HERE.pem -nodes -clcerts</code>
+<img src="/public/images/posts/swift-nio-ssl/terminal-input.png" alt="Convert to pem" /></p></li>
+
+<li><h4 id="enjoy-encrypted-channel-comms">Enjoy encrypted channel comms</h4>
+
+<p>You can know take the certificate and private key and use them with your <code>swift-nio</code> server
+<img src="/public/images/posts/swift-nio-ssl/there-it-is.png" alt="wow" /></p></li>
+</ol>
+
+<h2 id="configuring-the-swift-nio-client">Configuring the swift-nio client</h2>
+
+<p>While the above will produce a certificate/key you can use with your servers, you may notice that an <code>SSL can't verify</code> error gets generated after trying to connect.</p>
+
+<p>This is because the default <code>TLSConfiguration</code> settings force CA verification.</p>
+
+<p>Since the cert you have is self signed, you have two options</p>
+
+<ol>
+<li><p>Add the CA to your trusted roots</p></li>
+
+<li><p>Tell the client not to verify the cert.</p></li>
+</ol>
+
+<p>I won&rsquo;t go into details into Option #1 as that can cause all sorts of new problems for folks reading this.</p>
+
+<p>So instead, here is a snippet you can use to make your client work:</p>
+
+<pre><code>let configuration = TLSConfiguration.forClient(cipherSuites: defaultCipherSuites,
+                                     minimumTLSVersion: .tlsv1,
+                                     maximumTLSVersion: nil,
+                                     certificateVerification: CertificateVerification.none,
+                                     trustRoots: .default,
+                                     certificateChain: [],
+                                     privateKey: nil,
+                                     applicationProtocols: [])
+</code></pre>
+
+<p>The key part is the <code>certificateVerification</code> argument in the initializer.</p>
+
+<p>It is set to <code>.none</code> to bypass verification.</p>
+
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container has-text-centered">
+    <p>&copy; krad.io 2017</p>
+  </div>
+</section>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/highlight.min.js"></script>
+
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/languages/go.min.js"></script>
+
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/languages/swift.min.js"></script>
+
+<script>hljs.initHighlightingOnLoad();</script>
+
+

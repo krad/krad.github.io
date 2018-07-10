@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>capture | krad.io</title>
+<link rel="stylesheet" href="https://www.krad.io/css/style.css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/styles/github.min.css">
+
+
+<section class="section">
+  <div class="container">
+    <nav class="nav">
+      <div class="nav-left">
+        <a class="nav-item" href="https://www.krad.io"><h1 class="title is-4">krad.io</h1></a>
+      </div>
+      <div class="nav-right">
+        <nav class="nav-item level is-mobile">
+          
+          <a class="level-item" href="https://github.com/krad">
+            <span class="icon">
+              <i class="fa fa-github"></i>
+            </span>
+          </a>
+          
+          <a class="level-item" href="/index.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+          </a>
+          
+        </nav>
+      </div>
+    </nav>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2 class="subtitle is-6">November 3, 2017</h2>
+    <h1 class="title">capture</h1>
+    <div class="content">
+      <p>I&rsquo;ve released a new tool called <code>capture</code></p>
+
+<p>It is a command line utility written in Swift 4.
+It allows a user to create video files from the command line.</p>
+
+<p>You can find it on Github: <a href="https://www.github.com/krad/capture">https://www.github.com/krad/capture</a></p>
+
+<p>More feature should start appearing in the tool over the course of the next few
+weeks.  I&rsquo;m aiming to provide a utility that is not only useful, but helps me to
+flesh out the API of the underlying library that powers it (so others can produce useful utilities)</p>
+
+<p>Here are some of the features available in version <code>0.0.1</code></p>
+
+<pre><code>capture 0.0.1 (https://www.krad.io)
+USAGE: capture [options]
+
+OPTIONS:
+  -o:	Path to file where video should be written
+  -l:	Lists available video devices on the system
+  -v:	Video device to record from (use -l to get list of available devices.)
+     	(Uses first available device if not given)
+  -w:	Lists available audio devices on the system
+     	(Uses first available device if not given)
+  -a:	Audio device to record from (use -w to get a list of available devices.)
+  -c:	Set the container format {mp4, mov, m4v}.
+     	Uses the extension of outfile if this is not present.
+
+  -t:	Recording time in seconds
+     	Will record indefinitely if not present.
+
+  -q:	Recording quality {low, medium, high, veryhigh, highest}
+  -b:	Desired bitrate
+  -f:	Overwrite the outfile if it exists
+
+EXAMPLE:
+  capture -o movie.mp4 -f -t 60
+</code></pre>
+
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container has-text-centered">
+    <p>&copy; krad.io 2017</p>
+  </div>
+</section>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/highlight.min.js"></script>
+
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/languages/go.min.js"></script>
+
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/languages/swift.min.js"></script>
+
+<script>hljs.initHighlightingOnLoad();</script>
+
+

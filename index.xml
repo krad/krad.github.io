@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>krad.io</title>
+    <link>https://www.krad.io/</link>
+    <description>Recent content on krad.io</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>&amp;copy; krad.io 2017</copyright>
+    <lastBuildDate>Wed, 04 Apr 2018 21:32:48 -0500</lastBuildDate>
+    
+	<atom:link href="https://www.krad.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>swift-nio SSL Certificate Generation</title>
+      <link>https://www.krad.io/posts/swift-nio-ssl-certificate-generation/</link>
+      <pubDate>Wed, 04 Apr 2018 21:32:48 -0500</pubDate>
+      
+      <guid>https://www.krad.io/posts/swift-nio-ssl-certificate-generation/</guid>
+      <description>Apple has released a new project for non-blocking io, appropriately named swift-nio
+It also released some SSL helpers for the project that allow you to create servers with encrypted communication channels.
+swift-nio is quite new and Apple appears to be doing quite a bit of work on it. That means that documentation is pretty sparse for somethings at the moment.
+One of those things is how to generate an SSL certificate for use with swift-nio</description>
+    </item>
+    
+  </channel>
+</rss>
